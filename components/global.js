@@ -5,15 +5,15 @@ export const globalStyles = StyleSheet.create({
       flex: 1,
     },
     foodImage: {
-      padding: 150,
-      alignSelf: 'center',
-      height: 200,
-      width: 200,
-      borderRadius: 200,
-      margin: 20
+        padding: 150,
+        alignSelf: 'center',
+        height: 200,
+        width: 200,
+        borderRadius: 200,
+        margin: 20
     },
     listItem: {
-        padding: 15,
+        padding: 20,
         backgroundColor: '#f8f8f8',
         borderBottomWidth: 1,
         borderColor: '#eee'
