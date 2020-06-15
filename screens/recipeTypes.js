@@ -1,13 +1,21 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import { LongPressGestureHandler } from 'react-native-gesture-handler';
 
 export default function RecipeTypes({ navigation }) {
-    
+    const [page, setPage] = useState({
+        page: "mains"
+    });
+
+    function changePage(page){
+        setPage(page);
+        navigation.navigate ("RecipeLists", {page});
+    }
+
     return (
         <View style={styles.page}>
             <Image style={styles.ImageLogo} source={require("../assets/Logo/920x126.png")} />
-            <TouchableOpacity style={styles.container} onPress={() => navigation.navigate ("RecipeLists")}>
+            <TouchableOpacity style={styles.container} onPress={() => changePage("mains")}>
                 <View style={styles.container}>
                     <Image
                         style={styles.Image}
