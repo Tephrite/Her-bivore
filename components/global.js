@@ -4,6 +4,17 @@ export const globalStyles = StyleSheet.create({
     container: {
       flex: 1,
     },
+    imageLogo: {
+        flex: 4,
+        width: null,
+        height: null,
+        resizeMode: 'contain'
+    },
+    imageButton: {
+        flex: 1,
+        height: 150,
+        borderRadius: 20,
+    },
     foodImage: {
         padding: 150,
         alignSelf: 'center',
@@ -30,6 +41,18 @@ export const globalStyles = StyleSheet.create({
         height: 60,
         padding: 15,
         backgroundColor: '#8dd289', //Green
+    },
+    anchorText: {
+
+        padding: 8,
+        justifyContent: 'center',
+        alignSelf: "flex-start",
+        marginBottom: 32,
+        marginLeft: -2,
+        fontFamily: 'Roboto-Bold',
+        backgroundColor: '#f2f2f2',
+        color: 'grey',
+        borderRadius: 5,
     },
     text:{
         color: '#fff',

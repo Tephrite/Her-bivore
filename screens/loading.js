@@ -29,9 +29,10 @@ export default function Loading({navigation}) {
     <View style={styles.container}>
       <Animated.View style={[styles.box, animatedStyles]}>
         <TouchableWithoutFeedback onPress={startAnimation}>
-          <Image style={styles.box} source={require("../assets/Logo/Icon.png")} />
-        </TouchableWithoutFeedback>
+          <Image style={styles.box} source={require("../assets/Logo/Icon.png")} />    
+        </TouchableWithoutFeedback>    
       </Animated.View>
+      <Image style={styles.fullLogo} source={require("../assets/Logo/920x126.png")} />
     </View>
   )
 }
@@ -46,5 +47,10 @@ const styles = StyleSheet.create({
   box: {
     width: 120,
     height: 120,
+  },
+  fullLogo: {
+    marginTop:50,
+    width: 300,
+    height: 40,
   }
 });
