@@ -33,7 +33,13 @@ export default function Navigator() {
         <Stack.Screen
           name='Recipe'
           component={Recipe}
-          
+          options={{
+            headerTitle: props => <Image style={{alignSelf: "center", resizeMode:"contain", width: "80%", height: 126}}source={require("../assets/Logo/920x126.png")} />,
+            headerRight: () => (<EvilIcons name="user" size={20} style={{ paddingRight: 20}}/>),
+            headerStyle: {
+              backgroundColor: '#f2f2f2',
+            }
+          }}
         />
         <Stack.Screen
           name='RecipeTypes'

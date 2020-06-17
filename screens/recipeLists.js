@@ -1,20 +1,23 @@
-import React, { useState } from 'react';
+import React, { Component, useState } from 'react';
 import { StyleSheet, View, Image, FlatList, Text, Button } from 'react-native';
 import { LongPressGestureHandler } from 'react-native-gesture-handler';
 import { globalStyles } from '../components/global';
-import Recipes from '../components/ListItem';
 import { AntDesign } from 'react-native-vector-icons';
 const cheerio = require("react-native-cheerio");
 
-export default function RecipeLists({ navigation }) {
-    const [items, setItems] = useState([
-    ]);
+export default class RecipeLists extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            item: [],
+            imageURL: " ",
+        };
+    }
 
-
-    async function fetchRecipes() {
+    async componentDidMount() {
         try {
-            const searchUrl = "https://www.her-bivore.com/mains.html";
+            const searchUrl = "https://www.her-bivore.com/" + this.props.route.params.page + ".html";
             const response = await fetch(searchUrl);   // fetch page
 
             const htmlString = await response.text();  // get response text
@@ -29,12 +32,28 @@ export default function RecipeLists({ navigation }) {
                 output[x] = output[x].substring(0, output[x].indexOf("<"))
 
             }
+
             output.forEach(element => {
-                setItems((prevItems) => {
-                    return [...prevItems,
-                    { text: element, key: Math.random().toString() }]
-                });
+                this.setState(prevState => ({
+                    item: [...prevState.item, { text: element, key: Math.random().toString() }]
+                }))
+
             });
+
+            if (this.props.route.params.page == "mains") {
+                this.setState({
+                    imageURL: "https://sites.create-cdn.net/siteimages/57/1/6/571639/16/7/5/16759562/1000x933.jpg?1540401340"
+                })
+            } else if (this.props.route.params.page == "sweet-treats") {
+                this.setState({
+                    imageURL: "https://sites.create-cdn.net/siteimages/57/1/6/571639/16/7/1/16718350/1000x667.JPG?1537273481"
+                })
+            } else {
+                this.setState({
+                    imageURL: "https://sites.create-cdn.net/siteimages/57/1/6/571639/16/6/7/16678943/642x340.jpg?1535810268"
+                })
+            }
+
 
         }
         catch (err) {
@@ -42,32 +61,46 @@ export default function RecipeLists({ navigation }) {
         }
     }
 
-    fetchRecipes();
-    return (
-        <View style={styles.container}>
+    render() {
 
-            <View style={styles.listContainer}>
-                
-                <Image
-                    style={styles.Image}
-                    source={{
-                        uri: 'https://sites.create-cdn.net/siteimages/57/1/6/571639/16/7/5/16759562/1000x933.jpg?1540401340',
-                    }} />
-                <View style={styles.hoverBackground}>
-                    <Text style={styles.hoverText}>MAINS </Text>
-                </View>
-            </View>
+
+        var Title = ""
+        if (this.props.route.params.page == "mains") {
+            Title = "Mains"
+        } else if (this.props.route.params.page == "sweet-treats") {
+            Title = "Sweet Treats"
+        } else {
+            Title = "Snacks & Sides"
+        }
+        return (
             <View style={styles.container}>
-                <FlatList
-                    style={styles.list}
-                    data={items}
-                    renderItem={({ item }) => <Recipes item={item} />} />
-            </View>
 
-        </View >
-    )
+                <View style={styles.listContainer}>
+
+                    <Image
+                        style={styles.Image}
+                        source={{
+                            uri: this.state.imageURL,
+                        }} />
+                    <View style={styles.hoverBackground}>
+                        <Text style={styles.hoverText}> {Title} </Text>
+                    </View>
+                </View>
+                <View style={styles.container}>
+                    <FlatList
+                        data={this.state.item}
+                        renderItem={({ item }) => (
+                            <Text
+                                style={globalStyles.listItemText}
+                                onPress={() => this.props.navigation.navigate("Recipe")}>{item.text}</Text>
+                        )} />
+                </View>
+
+            </View >
+        )
+    }
+
 }
-
 const styles = StyleSheet.create({
     Image: {
         height: 200,

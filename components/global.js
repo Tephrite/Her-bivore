@@ -1,8 +1,9 @@
-import {StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { color } from 'react-native-reanimated';
 
 export const globalStyles = StyleSheet.create({
     container: {
-      flex: 1,
+        flex: 1,
     },
     imageLogo: {
         flex: 4,
@@ -23,18 +24,12 @@ export const globalStyles = StyleSheet.create({
         borderRadius: 200,
         margin: 20
     },
-    listItem: {
-        padding: 20,
+
+    listItemText: {
+        padding: 40,
         backgroundColor: '#f8f8f8',
         borderBottomWidth: 1,
-        borderColor: '#eee'
-    },
-    listItemView: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    listItemText: {
+        borderColor: '#eee',
         fontSize: 18,
     },
     header: {
@@ -54,9 +49,9 @@ export const globalStyles = StyleSheet.create({
         color: 'grey',
         borderRadius: 5,
     },
-    text:{
+    text: {
         color: '#fff',
         fontSize: 23,
         textAlign: 'center',
     },
-  });
+});
