@@ -16,62 +16,21 @@ export default class RecipeLists extends Component {
     }
 
     async componentDidMount() {
-        try {
-            const searchUrl = "https://www.her-bivore.com/" + this.props.route.params.page + ".html";
-            const response = await fetch(searchUrl);   // fetch page
+        const res = await fetch('http://192.168.0.17:3000/recipeLists/mains')
+        const recipeLists = await res.json()
 
-            const htmlString = await response.text();  // get response text
-            const $ = cheerio.load(htmlString);  // parse HTML string
-            var count = 1;
+        recipeLists.forEach(element => {
+            this.setState(prevState => ({
+                item: [...prevState.item, { text: element.title, key: Math.random().toString(), image: element.image, url: element.url }]
+            }))
 
-            const siteHeading = $(".block-edit--repeatable");
-
-            var output = siteHeading.find('a').text().split(">");
-
-            for (var x = 0; x < output.length; x++) {
-                output[x] = output[x].substring(0, output[x].indexOf("<"))
-
-            }
-
-            output.forEach(element => {
-                this.setState(prevState => ({
-                    item: [...prevState.item, { text: element, key: Math.random().toString() }]
-                }))
-
-            });
-
-            if (this.props.route.params.page == "mains") {
-                this.setState({
-                    imageURL: "https://sites.create-cdn.net/siteimages/57/1/6/571639/16/7/5/16759562/1000x933.jpg?1540401340"
-                })
-            } else if (this.props.route.params.page == "sweet-treats") {
-                this.setState({
-                    imageURL: "https://sites.create-cdn.net/siteimages/57/1/6/571639/16/7/1/16718350/1000x667.JPG?1537273481"
-                })
-            } else {
-                this.setState({
-                    imageURL: "https://sites.create-cdn.net/siteimages/57/1/6/571639/16/6/7/16678943/642x340.jpg?1535810268"
-                })
-            }
-
-
-        }
-        catch (err) {
-            console.log(err);
-        }
+        });
+        this.setState({ imageURL: this.props.route.params.page.imageURL })
     }
 
     render() {
 
-
-        var Title = ""
-        if (this.props.route.params.page == "mains") {
-            Title = "Mains"
-        } else if (this.props.route.params.page == "sweet-treats") {
-            Title = "Sweet Treats"
-        } else {
-            Title = "Snacks & Sides"
-        }
+        var Title = this.props.route.params.page.title
         return (
             <View style={styles.container}>
 
@@ -88,12 +47,28 @@ export default class RecipeLists extends Component {
                 </View>
                 <View style={styles.container}>
                     <FlatList
+
                         data={this.state.item}
-                        renderItem={({ item }) => (
-                            <Text
-                                style={globalStyles.listItemText}
-                                onPress={() => this.props.navigation.navigate("Recipe")}>{item.text}</Text>
-                        )} />
+                        renderItem={({ item }) => {
+                            return (
+                                <View style={styles.container}>
+                                    {!!item.text && (
+                                        <Text
+                                            style={globalStyles.listItemText}
+                                            onPress={() => this.props.navigation.navigate("Recipe")}>
+                                            {item.text}
+                                        </Text>
+                                    )}
+                                    {item.image && (
+                                        <Image
+                                            source={{ uri: item.image }}
+                                            style={{ height: 100, width: 100 }}
+                                        />
+                                    )}
+                                </View>
+                            );
+                        }}
+                    />
                 </View>
 
             </View >
@@ -112,7 +87,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
     },
     listContainer: {
-        flex: 0.5,
+        //flex: 0.5,
     },
     list: {
         flex: 1,

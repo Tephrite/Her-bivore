@@ -1,58 +1,54 @@
-import React, {Component, useState} from 'react';
+import React, { Component, useState } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import { LongPressGestureHandler } from 'react-native-gesture-handler';
 import { globalStyles } from '../components/global';
+const axios = require('axios').default;
 
 export default class RecipeTypes extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props)
+
+        this.state = {
+            recipeTypes: []
+        }
     }
 
-     changePage(page){
-        this.props.navigation.navigate ("RecipeLists", {page: page});
+    changePage(page) {
+        this.props.navigation.navigate("RecipeLists", { page: page });
     }
 
-    render(){
+    async componentDidMount() {
+
+        const res = await fetch('http://192.168.0.17:3000/recipeTypes')
+        const recipeTypes = await res.json()
+
+        this.setState({ recipeTypes: recipeTypes })
+    }
+
+    render() {
+        const { recipeTypes } = this.state
         return (
             <View style={styles.page}>
-    
-                <TouchableOpacity style={styles.container} onPress={() => this.changePage("mains")}>
-                    <View style={styles.container}>
-                        <Image
-                            style={globalStyles.imageButton}
-                            source={{
-                                uri: 'https://sites.create-cdn.net/siteimages/57/1/6/571639/16/7/5/16759562/1000x933.jpg?1540401340',
-                            }} />
-    
-                    </View>
-                    
-                </TouchableOpacity>
-                <Text style={globalStyles.anchorText}>MAINS</Text>
-                <TouchableOpacity style={styles.container}onPress={() => this.changePage("sweet-treats")}>
-                    <View style={styles.container}>
-                        <Image
-                            style={globalStyles.imageButton}
-                            source={{
-                                uri: 'https://sites.create-cdn.net/siteimages/57/1/6/571639/16/7/1/16718350/1000x667.JPG?1537273481',
-                            }} />
-                    </View>
-                </TouchableOpacity>
-                <Text style={globalStyles.anchorText}>SWEET TREATS</Text>
-                <TouchableOpacity style={styles.container} onPress={() => this.changePage("snacks")}>
-                    <View style={styles.container}>
-                        <Image
-                            style={globalStyles.imageButton}
-                            source={{
-                                uri: 'https://sites.create-cdn.net/siteimages/57/1/6/571639/16/6/7/16678943/642x340.jpg?1535810268',
-                            }} cropTop={100000}/>
-                    </View>
-                </TouchableOpacity>
-                <Text style={globalStyles.anchorText}>SNACKS & SIDES</Text>
-            </View >
+                { recipeTypes.length ?
+                    recipeTypes.map(type =>
+                        <View style={styles.page} key={type.title}>
+                            <TouchableOpacity style={styles.container} onPress={() => this.changePage(type)}>
+                                <View style={styles.container}>
+                                    <Image
+                                        style={globalStyles.imageButton}
+                                        source={{ uri: type.imageURL }} />
+                                </View>
+                            </TouchableOpacity>
+                            <Text style={globalStyles.anchorText}>{type.title}</Text>
+                        </View>
+
+                    ) : null
+                }
+            </View>
         )
     }
-    
+
 }
 
 const styles = StyleSheet.create({
